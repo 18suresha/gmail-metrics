@@ -2,6 +2,7 @@
   "name": "gmail-metrics",
   "private": true,
   "dependencies": {
+    "axios": "^0.21.1",
     "fs": "0.0.1-security",
     "googleapis": "^66.0.0"
   },
