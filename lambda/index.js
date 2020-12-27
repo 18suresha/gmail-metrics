@@ -1,4 +1,6 @@
-const axios = require('axios')
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-2'});
+const axios = require('axios');
 const fs = require('fs');
 
 async function getMetrics() {
@@ -6,10 +8,10 @@ async function getMetrics() {
     const creds = JSON.parse(creds_file);
 
     let METRICS_PARAMS = {
-        fngtm: '(NOT from:*@gmail.com) to:asuresh180@gmail.com in:inbox newer_than:1d', 
-        fgtm: 'from:*@gmail.com to:asuresh180@gmail.com in:inbox newer_than:1d',
-        fmtng: 'from:asuresh180@gmail.com (NOT to:*@gmail.com) in:inbox newer_than:1d',
-        fmtg: 'from:asuresh180@gmail.com to:*@gmail.com in:inbox newer_than:1d'
+        fngtm: '(NOT from:*@gmail.com) to:asuresh180@gmail.com in:inbox newer_than:1h', 
+        fgtm: 'from:*@gmail.com to:asuresh180@gmail.com in:inbox newer_than:1h',
+        fmtng: 'from:asuresh180@gmail.com (NOT to:*@gmail.com) in:inbox newer_than:1h',
+        fmtg: 'from:asuresh180@gmail.com to:*@gmail.com in:inbox newer_than:1h'
     }
 
     var results = {
@@ -48,6 +50,33 @@ async function getMetrics() {
     return results;
 }
 
-(async() => {
-    console.log(await getMetrics());
-})()
+async function insertMetrics() {
+    const ddb = new AWS.DynamoDB.DocumentClient();
+    const tstamp = Math.floor(Date.now() / 1000);
+    const results = await getMetrics();
+    for (let key in results) {
+        let params = {
+            TableName: 'gmail_metrics',
+            Item: {
+                'metric': key,
+                'tstamp': tstamp,
+                'count': results[key]
+            }
+        };
+        ddb.put(params, function(err, data) {
+            if (err) {
+                console.log('Error', err)
+            } else {
+                console.log('Success', data)
+                return false;
+            }
+        });
+    }
+    return true;
+}
+
+exports.handler = async function() {
+    // (async() => {
+        await insertMetrics();
+    // })()
+};
