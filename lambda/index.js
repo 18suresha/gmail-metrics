@@ -75,8 +75,8 @@ async function insertMetrics() {
     return true;
 }
 
-exports.handler = async function() {
-    // (async() => {
+exports.handler = function() {
+    (async() => {
         await insertMetrics();
-    // })()
+    })()
 };
