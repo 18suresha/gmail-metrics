@@ -32,7 +32,7 @@ router.get('/', function (req, res, next) {
           console.log("Error", err);
           reject(err);
         } else {
-          data.Items.forEach(function(item) {
+          data.Items.forEach(function (item) {
             arr[key] = item.count;
           });
           cnt += 1;
