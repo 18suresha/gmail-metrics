@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var router = express.Router();
 const AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-east-2' });
@@ -6,7 +7,7 @@ AWS.config.update({ region: 'us-east-2' });
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', cors(), function (req, res, next) {
   const promise = new Promise((resolve, reject) => {
     let min_timestamp = Math.floor(new Date(req.query.date).getTime() / 1000) + (req.query.hour * 3600);
     let max_timestamp = min_timestamp + 3599;
