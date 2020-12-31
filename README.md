@@ -1,6 +1,8 @@
 # gmail-metrics
 
-[18suresha.github.io/gmail-metrics](https://18suresha.github.io/gmail-metrics)
+## Description
+
+An AWS Lambda function pulls data from Gmail using the Gmail API every hour and inserts the data into a DynamoDB table. An Express endpoint deployed on Elastic Beanstalk pulls and returns data from the table based on the query parameters. This is then visualized using Vue.js and Bootstrap.
 
 ***
 
