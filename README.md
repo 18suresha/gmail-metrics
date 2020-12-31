@@ -1,6 +1,6 @@
 # gmail-metrics
 
-18suresha.github.io/gmail-metrics
+[18suresha.github.io/gmail-metrics](18suresha.github.io/gmail-metrics)
 
 ***
 
